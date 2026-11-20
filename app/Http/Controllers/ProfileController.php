@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,8 +34,25 @@ class ProfileController extends Controller
             'avatar' => ['nullable', 'image', 'max:2048'],
         ]);
         if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+
+            if (! $file->isValid()) {
+                return back()
+                    ->withErrors(['avatar' => 'The photo could not be read. Please choose another image and try again.'])
+                    ->withInput();
+            }
+
+            $stored = ImageUpload::store($file, 'avatars');
+
+            if ($stored === null) {
+                return back()
+                    ->withErrors(['avatar' => 'The photo could not be saved. Please try a smaller image, or check the server upload settings, and try again.'])
+                    ->withInput();
+            }
+
+            // Only delete the old avatar once the new one is stored safely.
             if ($user->avatar) Storage::disk('public')->delete($user->avatar);
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $stored;
         }
         $user->update($data);
         return redirect()->route('profile.show', $user->fresh())->with('status', 'Profile updated.');

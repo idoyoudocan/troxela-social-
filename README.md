@@ -47,6 +47,26 @@ Sample users (ayesha, tanvir, nusrat, rahim) use the same demo password.
 6. Make sure `storage/` and `bootstrap/cache/` are writable by the web server.
 7. Set the queue/mail settings in `.env` if you want email notifications.
 
+## Image uploads — if uploads fail on the server
+
+Uploads are stored on the `public` disk under `storage/app/public/avatars`
+and `storage/app/public/posts` (those folders ship with the code). If an
+image upload fails on a host, check these server settings:
+
+1. `php artisan storage:link` has been run (step 5 above) so uploaded
+   files are reachable at `/storage/...`.
+2. The web server can write to `storage/app/public`.
+3. In the server's `php.ini`, `file_uploads` is On, `upload_tmp_dir`
+   exists and is writable, and `upload_max_filesize` / `post_max_size`
+   are larger than the photos being uploaded (phone photos are often
+   3–8 MB; the app itself allows avatars up to 2 MB and post images up
+   to 5 MB).
+4. Restart PHP-FPM / the web server after changing `php.ini`.
+
+A failed upload now shows a friendly error on the form instead of a
+500 page, and the old avatar/post image is kept until the new one is
+stored successfully.
+
 ## GitHub
 
 Code is pushed to the public repository for this project (see the repository URL in the

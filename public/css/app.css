@@ -26,7 +26,7 @@ svg{display:block}
 
 /* ---------- Header ---------- */
 header.site{position:sticky;top:0;z-index:20;background:var(--header);border-bottom:1px solid var(--border)}
-.header-inner{max-width:1380px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:28px}
+.header-inner{max-width:1600px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:28px}
 .brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .brand:hover{text-decoration:none}
 .logo-tile{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#00bfa5,#00a884 55%,#009966);color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,168,132,.35)}
@@ -46,8 +46,8 @@ header.site{position:sticky;top:0;z-index:20;background:var(--header);border-bot
 
 /* ---------- Page layout ---------- */
 main.page{max-width:960px;margin:0 auto;padding:20px 16px 60px}
-main.page.wide{max-width:1380px;padding:20px}
-.home-grid{display:grid;grid-template-columns:290px minmax(0,1fr) 400px;gap:22px;align-items:start}
+main.page.wide{max-width:1600px;padding:20px 32px}
+.home-grid{display:grid;grid-template-columns:290px minmax(0,650px) 400px;gap:22px;align-items:start;justify-content:space-between}
 .col-left,.col-right{position:sticky;top:84px;display:flex;flex-direction:column;gap:20px}
 .col-centre{display:flex;flex-direction:column;gap:20px;min-width:0}
 @media(max-width:1100px){

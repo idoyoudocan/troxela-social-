@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Notifications\UserNotification;
+use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,23 @@ class PostController extends Controller
         ]);
         $post = new Post(['body' => $data['body'], 'user_id' => Auth::id()]);
         if ($request->hasFile('image')) {
-            $post->image = $request->file('image')->store('posts', 'public');
+            $file = $request->file('image');
+
+            if (! $file->isValid()) {
+                return back()
+                    ->withErrors(['image' => 'The photo could not be read. Please choose another image and try again.'])
+                    ->withInput();
+            }
+
+            $stored = ImageUpload::store($file, 'posts');
+
+            if ($stored === null) {
+                return back()
+                    ->withErrors(['image' => 'The photo could not be saved. Please try a smaller image, or check the server upload settings, and try again.'])
+                    ->withInput();
+            }
+
+            $post->image = $stored;
         }
         $post->save();
         return back()->with('status', 'Post published.');
@@ -47,8 +64,25 @@ class PostController extends Controller
         ]);
         $post->body = $data['body'];
         if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            if (! $file->isValid()) {
+                return back()
+                    ->withErrors(['image' => 'The photo could not be read. Please choose another image and try again.'])
+                    ->withInput();
+            }
+
+            $stored = ImageUpload::store($file, 'posts');
+
+            if ($stored === null) {
+                return back()
+                    ->withErrors(['image' => 'The photo could not be saved. Please try a smaller image, or check the server upload settings, and try again.'])
+                    ->withInput();
+            }
+
+            // Only delete the old image once the new one is stored safely.
             if ($post->image) Storage::disk('public')->delete($post->image);
-            $post->image = $request->file('image')->store('posts', 'public');
+            $post->image = $stored;
         }
         $post->save();
         return redirect()->route('posts.show', $post)->with('status', 'Post updated.');

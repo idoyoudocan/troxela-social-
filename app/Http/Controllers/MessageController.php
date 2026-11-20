@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\User;
 use App\Notifications\UserNotification;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,40 @@ class MessageController extends Controller
             $q->where('sender_id', $user->id)->where('receiver_id', $me->id);
         })->orderBy('created_at')->paginate(50);
         return view('messages.show', compact('user', 'messages'));
+    }
+
+    /**
+     * Live-update endpoint for an open thread: returns messages newer
+     * than the given id, newest last. The chat page polls this every
+     * few seconds so new messages appear without a page reload.
+     */
+    public function updates(Request $request, User $user): JsonResponse
+    {
+        $me = Auth::user();
+        abort_if($me->id === $user->id, 403);
+
+        $after = (int) $request->query('after', 0);
+
+        Message::where('sender_id', $user->id)->where('receiver_id', $me->id)
+            ->whereNull('read_at')->update(['read_at' => now()]);
+
+        $messages = Message::where(function ($q) use ($user, $me) {
+            $q->where('sender_id', $me->id)->where('receiver_id', $user->id);
+        })->orWhere(function ($q) use ($user, $me) {
+            $q->where('sender_id', $user->id)->where('receiver_id', $me->id);
+        })->where('id', '>', $after)->orderBy('created_at')->limit(50)->get();
+
+        $unread = Message::where('receiver_id', $me->id)->whereNull('read_at')->count();
+
+        return response()->json([
+            'messages' => $messages->map(fn (Message $m) => [
+                'id' => $m->id,
+                'body' => $m->body,
+                'mine' => $m->sender_id === $me->id,
+                'time' => $m->created_at->diffForHumans(),
+            ]),
+            'unread' => $unread,
+        ]);
     }
 
     public function store(Request $request, User $user): RedirectResponse

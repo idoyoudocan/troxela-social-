@@ -34,7 +34,7 @@
         @php($unreadNotifs = auth()->user()->unreadNotifications()->count())
         <a class="icon-btn" href="{{ route('messages.index') }}" title="Messages">
           @include('partials.icon', ['name' => 'message', 'size' => 21])
-          @if($unreadMsgs)<span class="msg-badge">{{ $unreadMsgs }}</span>@endif
+          <span class="msg-badge" @if(!$unreadMsgs) style="display:none" @endif>{{ $unreadMsgs }}</span>
         </a>
         <a class="icon-btn" href="{{ route('notifications.index') }}" title="Notifications">
           @include('partials.icon', ['name' => 'bell', 'size' => 21])
