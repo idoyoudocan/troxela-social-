@@ -12,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // The theme toggle sets a plain `theme` cookie from JavaScript, so it
+        // must not be encrypted or Laravel cannot read it back.
+        $middleware->encryptCookies(except: ['theme']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -26,4 +26,14 @@ class Post extends Model
     {
         return $this->image ? asset('storage/' . $this->image) : null;
     }
+
+    /** Body HTML with the text escaped and #hashtags wrapped in teal spans. */
+    public function formattedBody(): string
+    {
+        return (string) preg_replace(
+            '/#([\p{L}\p{N}_]+)/u',
+            '<span class="hashtag">#$1</span>',
+            e($this->body)
+        );
+    }
 }
