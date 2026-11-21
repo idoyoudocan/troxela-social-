@@ -8,7 +8,6 @@ use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -81,7 +80,7 @@ class PostController extends Controller
             }
 
             // Only delete the old image once the new one is stored safely.
-            if ($post->image) Storage::disk('public')->delete($post->image);
+            ImageUpload::delete($post->image);
             $post->image = $stored;
         }
         $post->save();
@@ -91,7 +90,7 @@ class PostController extends Controller
     public function destroy(Post $post): RedirectResponse
     {
         abort_unless($post->user_id === Auth::id(), 403);
-        if ($post->image) Storage::disk('public')->delete($post->image);
+        ImageUpload::delete($post->image);
         $post->delete();
         return redirect()->route('home')->with('status', 'Post deleted.');
     }

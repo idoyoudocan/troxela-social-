@@ -60,9 +60,33 @@ image upload fails on a host, check these server settings:
 3. In the server's `php.ini`, `file_uploads` is On, `upload_tmp_dir`
    exists and is writable, and `upload_max_filesize` / `post_max_size`
    are larger than the photos being uploaded (phone photos are often
-   3–8 MB; the app itself allows avatars up to 2 MB and post images up
-   to 5 MB).
+   3–8 MB; the app itself allows avatars and post images up to 5 MB).
+   On troxela.store's cPanel (MultiPHP INI Editor) set at least
+   `upload_max_filesize = 8M` and `post_max_size = 16M` — with the
+   common 2M default, any phone photo over 2 MB is rejected by PHP
+   before the app ever sees it and the form reports
+   "The image failed to upload."
 4. Restart PHP-FPM / the web server after changing `php.ini`.
+
+**Split layout without shell access (troxela.store).** On this host
+the app lives in `troxela_social` while the document root is the
+sibling `public_html`, and there is no Terminal, so
+`php artisan storage:link` cannot be run and `public_html/storage`
+is only a static copy. Uploads land in `storage/app/public` but
+nothing ever reaches the served folders, so new posts publish
+text-only and new avatars fall back to their initial letter — with
+no error anywhere. The code handles this: after every successful
+store, `App\Support\ImageUpload` also copies the file into each
+web-served storage folder that exists as a real directory —
+`public/storage` (when it is not a symlink), the folder named by
+`PUBLIC_STORAGE_MIRROR_PATH` in `.env` (on troxela.store set it to
+`/home/troxelas/public_html/storage`), and `<app-parent>/public_html/storage`
+when it exists. A mirror failure never fails the upload; it is only
+logged. Deleting or replacing an image deletes its mirror copies too.
+One-time, after deploying: copy the existing uploads from
+`storage/app/public/avatars` and `storage/app/public/posts` into
+`public_html/storage/avatars` and `public_html/storage/posts` so
+previously uploaded photos become visible again.
 
 A failed upload now shows a friendly error on the form instead of a
 500 page, and the old avatar/post image is kept until the new one is

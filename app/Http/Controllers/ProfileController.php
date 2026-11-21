@@ -6,7 +6,6 @@ use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -37,7 +36,7 @@ class ProfileController extends Controller
             'username' => ['required', 'string', 'max:30', 'alpha_dash', Rule::unique('users')->ignore($user->id)],
             'bio' => ['nullable', 'string', 'max:500'],
             'date_of_birth' => ['nullable', 'date', 'before:today'],
-            'avatar' => ['nullable', 'image', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'max:5120'],
         ]);
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
@@ -57,7 +56,7 @@ class ProfileController extends Controller
             }
 
             // Only delete the old avatar once the new one is stored safely.
-            if ($user->avatar) Storage::disk('public')->delete($user->avatar);
+            ImageUpload::delete($user->avatar);
             $data['avatar'] = $stored;
         }
         $user->update($data);
