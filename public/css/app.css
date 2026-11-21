@@ -133,13 +133,13 @@ button:hover,.btn:hover{filter:brightness(1.1);text-decoration:none}
 .story-plus{position:absolute;right:0;bottom:0;width:20px;height:20px;border-radius:50%;background:#22c55e;color:#fff;border:2px solid var(--card);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
 .story span{display:block;font-size:12px;color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:1100px){
-  .story,.story-img,.story-img img{width:56px;height:56px}
   .story{width:56px}
+  .story-img,.story-img img{width:56px;height:56px}
   .stories-row{gap:14px}
 }
 @media(max-width:480px){
-  .story,.story-img,.story-img img{width:52px;height:52px}
   .story{width:52px}
+  .story-img,.story-img img{width:52px;height:52px}
   .stories-row{gap:10px}
   .story span{font-size:11px}
 }
@@ -168,7 +168,8 @@ button:hover,.btn:hover{filter:brightness(1.1);text-decoration:none}
 /* ---------- Post cards ---------- */
 .post-card{margin-bottom:20px}
 .post-head{display:flex;gap:12px;align-items:flex-start}
-.post-head .who{line-height:1.35;min-width:0}
+.post-head .who{line-height:1.35;min-width:0;flex:1}
+.post-head .who b,.post-head .who .sub{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .post-head .who b{color:var(--text);font-size:15px}
 .post-head .who .sub{display:block;color:var(--muted);font-size:13px}
 .more-menu{margin-left:auto;position:relative}
@@ -179,7 +180,7 @@ button:hover,.btn:hover{filter:brightness(1.1);text-decoration:none}
 .more-pop a,.more-pop button{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:8px;color:var(--text-2);font-size:14px;background:none;border:0;cursor:pointer;font-family:var(--font-sans);font-weight:500}
 .more-pop a:hover,.more-pop button:hover{background:var(--hover);text-decoration:none}
 .more-pop button.danger{color:#dc2626}
-.post-body{font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:12px 0 0}
+.post-body{font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;margin:12px 0 0}
 .hashtag{color:var(--teal);font-weight:600}
 .post-img{width:100%;max-width:100%;height:auto;display:block;border-radius:16px;margin-top:12px;border:1px solid var(--border)}
 .post-actions{display:flex;gap:6px 4px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap}
