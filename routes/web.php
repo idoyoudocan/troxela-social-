@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
@@ -13,6 +14,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explore', [HomeController::class, 'explore'])->name('explore');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+
+Route::post('/chatbot/message', [ChatbotController::class, 'message'])
+    ->middleware('throttle:30,1')
+    ->name('chatbot.message');
 
 // Auth (guests)
 Route::middleware('guest')->group(function () {

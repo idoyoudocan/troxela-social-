@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <title>{{ trim($__env->yieldContent('title')) ?: 'Troxela' }} — Troxela</title>
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('favicon.png') }}">
@@ -68,6 +69,7 @@
     <a href="{{ route('login') }}">@include('partials.icon', ['name' => 'user', 'size' => 22]) Profile</a>
   @endauth
 </nav>
+@include('partials.chatbot')
 <script>
 function toggleTheme(){
   const html=document.documentElement;
