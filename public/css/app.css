@@ -29,7 +29,7 @@ header.site{position:sticky;top:0;z-index:20;background:var(--header);border-bot
 .header-inner{max-width:1600px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:28px}
 .brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .brand:hover{text-decoration:none}
-.logo-tile{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#00bfa5,#00a884 55%,#009966);color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,168,132,.35)}
+.logo-img{width:40px;height:40px;border-radius:12px;box-shadow:0 2px 6px rgba(0,168,132,.35);display:block}
 .wordmark{font-weight:800;font-size:20px;letter-spacing:.14em;color:var(--text);text-transform:uppercase}
 .pill-nav{display:flex;align-items:center;gap:2px;background:var(--input);border-radius:999px;padding:4px;margin:0 auto}
 .pill-nav a{display:grid;place-items:center;width:46px;height:36px;border-radius:999px;color:var(--muted)}

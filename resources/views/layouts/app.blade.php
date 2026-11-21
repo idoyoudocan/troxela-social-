@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ trim($__env->yieldContent('title')) ?: 'Troxela' }} — Troxela</title>
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+<link rel="icon" type="image/png" sizes="512x512" href="{{ asset('favicon.png') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,7 +16,7 @@
 <header class="site">
   <div class="header-inner">
     <a class="brand" href="{{ route('home') }}">
-      <span class="logo-tile">T</span>
+      <img class="logo-img" src="{{ asset('images/logo-mark.png') }}" alt="Troxela" width="40" height="40">
       <span class="wordmark">Troxela</span>
     </a>
     <nav class="pill-nav" aria-label="Main">
