@@ -42,7 +42,7 @@
         </a>
         <a href="{{ route('profile.show', auth()->user()) }}" title="My Profile"><img class="header-avatar" src="{{ auth()->user()->avatarUrl() }}" alt=""></a>
       @else
-        <a class="navlink" href="{{ route('login') }}" style="color:var(--text-2);font-size:14px">Log in</a>
+        <a class="navlink login-link" href="{{ route('login') }}" style="color:var(--text-2);font-size:14px;white-space:nowrap">Log in</a>
         <a class="btn btn-sm" href="{{ route('register') }}">Sign up</a>
       @endauth
     </div>
@@ -52,6 +52,19 @@
   @if(session('status'))<div class="flash">{{ session('status') }}</div>@endif
   @yield('content')
 </main>
+<nav class="mobile-nav" aria-label="Mobile">
+  <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">@include('partials.icon', ['name' => 'home', 'size' => 22]) Home</a>
+  <a href="{{ route('explore') }}" class="{{ request()->routeIs('explore') ? 'active' : '' }}">@include('partials.icon', ['name' => 'star', 'size' => 22]) Explore</a>
+  <a href="{{ route('search') }}" class="{{ request()->routeIs('search') ? 'active' : '' }}">@include('partials.icon', ['name' => 'search', 'size' => 22]) Search</a>
+  @auth
+    @php($unreadMsgsNav = auth()->user()->unreadMessagesCount())
+    <a href="{{ route('messages.index') }}" class="{{ request()->routeIs('messages.*') ? 'active' : '' }}">@include('partials.icon', ['name' => 'message', 'size' => 22]) Messages<span class="msg-badge" @if(!$unreadMsgsNav) style="display:none" @endif>{{ $unreadMsgsNav }}</span></a>
+    <a href="{{ route('profile.show', auth()->user()) }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">@include('partials.icon', ['name' => 'user', 'size' => 22]) Profile</a>
+  @else
+    <a href="{{ route('login') }}">@include('partials.icon', ['name' => 'message', 'size' => 22]) Messages</a>
+    <a href="{{ route('login') }}">@include('partials.icon', ['name' => 'user', 'size' => 22]) Profile</a>
+  @endauth
+</nav>
 <script>
 function toggleTheme(){
   const html=document.documentElement;

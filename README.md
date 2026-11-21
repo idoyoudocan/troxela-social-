@@ -67,6 +67,32 @@ A failed upload now shows a friendly error on the form instead of a
 500 page, and the old avatar/post image is kept until the new one is
 stored successfully.
 
+## Password reset
+
+The site has password reset built in (Laravel's Password broker):
+`/forgot-password` sends a reset link by email and
+`/reset-password/{token}` sets a new password. No extra database table
+is needed — the `password_reset_tokens` table ships with the default
+migrations.
+
+By default the app uses the `log` mail driver (`MAIL_MAILER=log` in
+`.env.example`), so reset links are only written to
+`storage/logs/laravel.log` and no email is actually sent. For real
+emails on troxela.store, set these in the host's `.env`:
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=<your SMTP host>
+MAIL_PORT=587
+MAIL_USERNAME=<your SMTP username>
+MAIL_PASSWORD=<your SMTP password>
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@troxela.store
+```
+
+Then restart PHP-FPM / the web server. With the log driver, copy the
+reset URL out of `storage/logs/laravel.log` to test the flow.
+
 ## GitHub
 
 Code is pushed to the public repository for this project (see the repository URL in the
