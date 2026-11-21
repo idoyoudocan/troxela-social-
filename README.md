@@ -8,11 +8,12 @@ emerald accent `#10B981`, with a light-theme toggle).
 
 - **Auth** — register / log in / log out, with username, name, bio, avatar upload and date of birth
 - **Profiles** — public pages at `/@username`, follow/unfollow, followers & following lists, edit profile
-- **Posts** — text + optional image upload, edit/delete your own posts, home feed (people you follow + you)
+- **Posts** — text + optional image upload, edit/delete your own posts, share/repost other people's posts to your profile, home feed (people you follow + you)
 - **Likes** — like/unlike with counts
 - **Comments** — comment on posts, delete your own comments (or comments on your posts)
 - **Follow** — follow/unfollow users
-- **Search** — search users by name/username and posts by text
+- **Search** — search users by name/username and posts by text or by author name/username
+- **Settings** — `/settings` page with account details, a password-reset link and notification actions
 - **Messages** — direct messages (conversation list + thread, unread counts)
 - **Notifications** — database notifications for likes, comments, follows and messages (bell with unread count, mark as read)
 - **Explore** — recent posts from everyone
@@ -66,6 +67,17 @@ image upload fails on a host, check these server settings:
 A failed upload now shows a friendly error on the form instead of a
 500 page, and the old avatar/post image is kept until the new one is
 stored successfully.
+
+If a user record points at an avatar or post image whose file is not
+actually under `public/storage` (for example, accounts whose uploaded
+files were never copied to the host, or a host where `storage:link`
+was never run), the site falls back gracefully instead of showing a
+broken image: a missing avatar shows the initial-letter avatar, and a
+missing post image is simply omitted. To show the real uploaded
+photos again on the host, copy the files into
+`storage/app/public/avatars` and `storage/app/public/posts` and make
+sure `public/storage` links to `storage/app/public`
+(`php artisan storage:link`).
 
 ## Password reset
 

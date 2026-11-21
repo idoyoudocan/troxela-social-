@@ -56,7 +56,21 @@ class User extends Authenticatable
     public function avatarUrl(): string
     {
         if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+            // An avatar value can point at a file that is no longer on the
+            // server — e.g. accounts imported from the old site whose
+            // uploaded files were never copied over, or a host where the
+            // public/storage link was never created. Serving
+            // asset('storage/...') for a missing file renders a broken
+            // image, so only use the stored file when it is actually
+            // reachable under public/storage; otherwise fall through to
+            // the initial-letter avatar below.
+            $path = ltrim($this->avatar, '/');
+            if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, 'data:')) {
+                return $this->avatar;
+            }
+            if (is_file(public_path('storage/' . $path))) {
+                return asset('storage/' . $path);
+            }
         }
         // Local initial avatar (no external service needed): emerald circle with first letter
         $initial = strtoupper(mb_substr(trim($this->name), 0, 1, 'UTF-8'));

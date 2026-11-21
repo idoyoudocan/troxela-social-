@@ -30,6 +30,11 @@
       <span class="action-btn">@include('partials.icon', ['name' => 'heart', 'size' => 17]) {{ $post->likes->count() }}</span>
     @endauth
     <a class="action-btn" href="{{ route('posts.show', $post) }}">@include('partials.icon', ['name' => 'message-circle', 'size' => 17]) {{ $post->comments->count() }} Comments</a>
+    @auth
+      <form method="POST" action="{{ route('posts.share', $post) }}" onsubmit="return confirm('Share this post to your profile?')">@csrf
+        <button type="submit" class="action-btn">@include('partials.icon', ['name' => 'share', 'size' => 17]) Share</button>
+      </form>
+    @endauth
     <button type="button" class="action-btn copy-link" data-url="{{ route('posts.show', $post) }}">@include('partials.icon', ['name' => 'link', 'size' => 17]) <span class="copy-label">Copy clean link</span></button>
     <button type="button" class="action-btn bookmark-btn">@include('partials.icon', ['name' => 'bookmark', 'size' => 17]) <span class="bm-label">Add Bookmark</span></button>
   </div>

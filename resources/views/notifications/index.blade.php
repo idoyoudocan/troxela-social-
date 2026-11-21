@@ -8,7 +8,7 @@
   </div>
   @forelse($notifications as $n)
   <div class="notif {{ $n->read_at ? '' : 'unread' }}">
-    <div><b>{{ $n->data['kind'] ?? 'notification' }}</b> — {{ $n->data['message'] ?? '' }}<br><span class="muted small">{{ $n->created_at->diffForHumans() }}</span></div>
+    <div>{{ $n->data['message'] ?? '' }}<br><span class="muted small">{{ $n->created_at->diffForHumans() }}</span></div>
     <form method="POST" action="{{ route('notifications.read', $n->id) }}">@csrf<button class="btn-sm" type="submit">Open</button></form>
   </div>
   @empty

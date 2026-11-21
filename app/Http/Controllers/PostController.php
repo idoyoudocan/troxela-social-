@@ -124,6 +124,23 @@ class PostController extends Controller
         return back()->with('status', 'Comment added.');
     }
 
+    public function share(Post $post): RedirectResponse
+    {
+        $user = Auth::user();
+        // Repost: publish the same post (text + image) on the sharer's
+        // own profile/feed. The image path is reused, not re-uploaded.
+        $shared = Post::create([
+            'user_id' => $user->id,
+            'body' => $post->body,
+            'image' => $post->image,
+        ]);
+        if ($post->user_id !== $user->id) {
+            $post->user->notify(new UserNotification(
+                $user->name . ' shared your post.', route('posts.show', $shared), 'share'));
+        }
+        return back()->with('status', 'Post shared to your profile.');
+    }
+
     public function destroyComment(Comment $comment): RedirectResponse
     {
         abort_unless($comment->user_id === Auth::id() || $comment->post->user_id === Auth::id(), 403);

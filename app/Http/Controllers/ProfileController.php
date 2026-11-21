@@ -23,6 +23,12 @@ class ProfileController extends Controller
         return view('profile.edit', ['user' => Auth::user()]);
     }
 
+    /** Account settings page (password, email, notifications). */
+    public function settings(): View
+    {
+        return view('profile.settings', ['user' => Auth::user()]);
+    }
+
     public function update(Request $request): RedirectResponse
     {
         $user = Auth::user();

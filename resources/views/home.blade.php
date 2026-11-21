@@ -34,7 +34,7 @@
       <a class="nav-item" href="{{ route('explore') }}">@include('partials.icon', ['name' => 'compass', 'size' => 20]) Explore</a>
       <a class="nav-item" href="{{ route('explore') }}">@include('partials.icon', ['name' => 'users', 'size' => 20]) My Groups</a>
       @auth
-        <a class="nav-item" href="{{ route('profile.edit') }}">@include('partials.icon', ['name' => 'settings', 'size' => 20]) Settings</a>
+        <a class="nav-item" href="{{ route('settings') }}">@include('partials.icon', ['name' => 'settings', 'size' => 20]) Settings</a>
         <form method="POST" action="{{ route('logout') }}" style="margin:0">@csrf<button class="nav-item logout" type="submit">@include('partials.icon', ['name' => 'logout', 'size' => 20]) Log out</button></form>
       @else
         <a class="nav-item" href="{{ route('login') }}">@include('partials.icon', ['name' => 'settings', 'size' => 20]) Settings</a>
