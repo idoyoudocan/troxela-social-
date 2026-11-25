@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Support\Chatbot;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class ChatbotTest extends TestCase
@@ -31,12 +32,34 @@ class ChatbotTest extends TestCase
         $this->assertStringContainsString('Forgot your password?', $response->json('reply'));
     }
 
-    public function test_unknown_question_gets_the_fallback(): void
+    public function test_unknown_question_gets_the_fallback_when_free_ai_fails(): void
     {
+        Http::fake(['text.pollinations.ai/*' => Http::response('', 500)]);
+
         $response = $this->postJson(route('chatbot.message'), ['message' => 'আবহাওয়া কেমন?']);
 
         $response->assertOk();
         $this->assertStringContainsString('পোস্ট করব কীভাবে', $response->json('reply'));
+    }
+
+    public function test_free_ai_answers_unknown_question_when_available(): void
+    {
+        Http::fake(['text.pollinations.ai/*' => Http::response('আজ ঢাকায় রোদেলা আবহাওয়া থাকবে।', 200)]);
+
+        $response = $this->postJson(route('chatbot.message'), ['message' => 'আবহাওয়া কেমন?']);
+
+        $response->assertOk();
+        $this->assertStringContainsString('ঢাকায় রোদেলা', $response->json('reply'));
+    }
+
+    public function test_new_faq_topics_are_answered_from_the_knowledge_base(): void
+    {
+        $this->assertStringContainsString('ভিডিও আপলোডের সুবিধা এখনো নেই', Chatbot::ruleBasedReply('ভিডিও দেওয়া যায়?'));
+        $this->assertStringContainsString('সম্পূর্ণ ফ্রি', Chatbot::ruleBasedReply('Troxela কি ফ্রি?'));
+        $this->assertStringContainsString('Explore পাতায়', Chatbot::ruleBasedReply('Explore কি?'));
+        $this->assertStringContainsString('••• মেনু', Chatbot::ruleBasedReply('পোস্ট ডিলিট করব কীভাবে?'));
+        $this->assertStringContainsString('অ্যাকাউন্ট নিজে ডিলিট', Chatbot::ruleBasedReply('অ্যাকাউন্ট ডিলিট করতে চাই'));
+        $this->assertNull(Chatbot::ruleBasedReply('আবহাওয়া কেমন?'));
     }
 
     public function test_message_is_required_and_limited(): void
