@@ -21,7 +21,7 @@
         <form method="POST" action="{{ route('users.follow', $user) }}">@csrf
           <button type="submit">{{ auth()->user()->isFollowing($user) ? 'Unfollow' : 'Follow' }}</button>
         </form>
-        <a class="btn btn-secondary" href="{{ route('messages.show', $user) }}">Message</a>
+        <a class="btn btn-secondary chat-open" href="{{ route('messages.show', $user) }}" data-user-id="{{ $user->id }}" data-user-username="{{ $user->username }}" data-user-name="{{ $user->name }}" data-user-avatar="{{ $user->avatarUrl() }}">Message</a>
       @endif
     @endauth
   </div>

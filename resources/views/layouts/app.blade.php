@@ -70,6 +70,7 @@
   @endauth
 </nav>
 @include('partials.chatbot')
+@include('partials.chat-dock')
 <script>
 function toggleTheme(){
   const html=document.documentElement;

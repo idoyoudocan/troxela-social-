@@ -80,14 +80,50 @@ class MessageController extends Controller
         ]);
     }
 
-    public function store(Request $request, User $user): RedirectResponse
+    /**
+     * Recent history for the floating chat dock: the latest 30
+     * messages, oldest first. Also marks incoming messages read.
+     */
+    public function history(User $user): JsonResponse
+    {
+        $me = Auth::user();
+        abort_if($me->id === $user->id, 403);
+
+        Message::where('sender_id', $user->id)->where('receiver_id', $me->id)
+            ->whereNull('read_at')->update(['read_at' => now()]);
+
+        $messages = Message::where(function ($q) use ($user, $me) {
+            $q->where('sender_id', $me->id)->where('receiver_id', $user->id);
+        })->orWhere(function ($q) use ($user, $me) {
+            $q->where('sender_id', $user->id)->where('receiver_id', $me->id);
+        })->orderByDesc('created_at')->orderByDesc('id')->limit(30)->get()->reverse()->values();
+
+        return response()->json([
+            'messages' => $messages->map(fn (Message $m) => [
+                'id' => $m->id,
+                'body' => $m->body,
+                'mine' => $m->sender_id === $me->id,
+                'time' => $m->created_at->diffForHumans(),
+            ]),
+        ]);
+    }
+
+    public function store(Request $request, User $user): RedirectResponse|JsonResponse
     {
         $me = Auth::user();
         abort_if($me->id === $user->id, 403);
         $data = $request->validate(['body' => ['required', 'string', 'max:2000']]);
-        Message::create(['sender_id' => $me->id, 'receiver_id' => $user->id, 'body' => $data['body']]);
+        $message = Message::create(['sender_id' => $me->id, 'receiver_id' => $user->id, 'body' => $data['body']]);
         $user->notify(new UserNotification(
             $me->name . ' sent you a message.', route('messages.show', $me), 'message'));
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['message' => [
+                'id' => $message->id,
+                'body' => $message->body,
+                'mine' => true,
+                'time' => $message->created_at->diffForHumans(),
+            ]], 201);
+        }
         return back();
     }
 }

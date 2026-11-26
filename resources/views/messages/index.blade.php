@@ -7,7 +7,7 @@
   <div class="user-row">
     <img class="avatar" src="{{ $t['user']->avatarUrl() }}" alt="">
     <div style="flex:1">
-      <a href="{{ route('messages.show', $t['user']) }}"><b>{{ $t['user']->name }}</b></a>
+      <a class="chat-open" href="{{ route('messages.show', $t['user']) }}" data-user-id="{{ $t['user']->id }}" data-user-username="{{ $t['user']->username }}" data-user-name="{{ $t['user']->name }}" data-user-avatar="{{ $t['user']->avatarUrl() }}"><b>{{ $t['user']->name }}</b></a>
       @if($t['unread'])<span class="badge">{{ $t['unread'] }}</span>@endif
       <br><span class="muted small">{{ $t['last'] ? \Illuminate\Support\Str::limit($t['last']->body, 80) : '' }}</span>
     </div>

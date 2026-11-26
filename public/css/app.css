@@ -275,3 +275,28 @@ footer.site{max-width:960px;margin:0 auto;padding:20px 16px;color:var(--muted);f
 @media (prefers-reduced-motion:reduce){
   .chatbot-fab,.chatbot-panel{transition:none}
 }
+
+/* Facebook-style floating chat dock: windows sit at the bottom-right,
+   left of the chatbot button, so the two never cover each other. */
+#chat-dock{position:fixed;right:88px;bottom:0;z-index:55;display:flex;gap:10px;align-items:flex-end;pointer-events:none}
+#chat-dock>*{pointer-events:auto}
+.chat-window{width:328px;max-width:calc(100vw - 100px);height:460px;max-height:calc(100vh - 24px);background:var(--card);border:1px solid var(--border);border-bottom:0;border-radius:12px 12px 0 0;box-shadow:0 8px 30px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden}
+.chat-win-head{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border);cursor:pointer}
+.chat-win-head img{width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.chat-win-name{flex:1;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-win-badge{min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+.chat-win-btn{border:0;background:none;color:var(--text-2);font-size:18px;line-height:1;cursor:pointer;padding:4px 6px;border-radius:8px}
+.chat-win-btn:hover{background:var(--hover)}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px 12px}
+.chat-msgs .msg{max-width:85%}
+.chat-win-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border)}
+.chat-win-form input{flex:1;min-width:0}
+.chat-win-form button{flex-shrink:0}
+.chat-window.minimized{height:48px}
+.chat-window.minimized .chat-msgs,.chat-window.minimized .chat-win-form{display:none}
+.chat-window.minimized .chat-win-head{border-bottom:0}
+@media (max-width:640px){
+  #chat-dock{right:0;left:0;bottom:0;top:0;z-index:70;display:block}
+  .chat-window{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;border:0}
+  .chat-win-min{display:none}
+}
