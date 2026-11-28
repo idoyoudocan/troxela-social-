@@ -7,7 +7,7 @@
 <title>{{ trim($__env->yieldContent('title')) ?: 'Troxela' }} — Troxela</title>
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('favicon.png') }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
+@include('partials.pwa-head')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -71,6 +71,7 @@
 </nav>
 @include('partials.chatbot')
 @include('partials.chat-dock')
+@include('partials.pwa-banner')
 <script>
 function toggleTheme(){
   const html=document.documentElement;

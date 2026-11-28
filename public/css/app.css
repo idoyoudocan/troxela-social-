@@ -300,3 +300,18 @@ footer.site{max-width:960px;margin:0 auto;padding:20px 16px;color:var(--muted);f
   .chat-window{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;border:0}
   .chat-win-min{display:none}
 }
+
+/* PWA install banner — Hisab-এর মতো */
+.pwa-banner[hidden]{display:none}
+.pwa-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:70;width:min(560px,calc(100vw - 24px));display:flex;align-items:center;gap:12px;background:#111827;color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px 14px;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.pwa-banner-icon{flex:none;width:48px;height:48px;border-radius:12px}
+.pwa-banner-text{flex:1;min-width:0}
+.pwa-banner-text strong{display:block;font-size:15px}
+.pwa-banner-text span{display:block;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.78);margin-top:2px}
+.pwa-install-btn{flex:none;background:#059669;color:#fff;border:0;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.pwa-install-btn:hover{filter:brightness(1.08)}
+.pwa-close{flex:none;background:none;border:0;color:rgba(255,255,255,.7);font-size:24px;line-height:1;cursor:pointer;padding:2px 4px}
+.pwa-close:hover{color:#fff}
+@media(max-width:640px){
+  .pwa-banner{bottom:76px}
+}
