@@ -315,3 +315,27 @@ footer.site{max-width:960px;margin:0 auto;padding:20px 16px;color:var(--muted);f
 @media(max-width:640px){
   .pwa-banner{bottom:76px}
 }
+
+/* Pagination — Laravel-এর ডিফল্ট Tailwind মার্কআপ, Tailwind ছাড়াই নিজের স্টাইল।
+   w-5 h-5 ক্লাসগুলো Tailwind ছাড়া কাজ করে না, তাই SVG তিরগুলো
+   ৩০০px+ দৈত্য হয়ে যেত (2026-11-28: ফোনে হোমপেজে দেখা গেছে)। */
+nav[aria-label="Pagination Navigation"]{margin:18px 0 10px}
+nav[aria-label="Pagination Navigation"] svg{width:18px;height:18px;flex:none;display:block}
+nav[aria-label="Pagination Navigation"]>div:first-child{display:flex;gap:8px;align-items:center;justify-content:space-between}
+nav[aria-label="Pagination Navigation"]>div:last-child{display:none}
+@media(min-width:640px){
+  nav[aria-label="Pagination Navigation"]>div:first-child{display:none}
+  nav[aria-label="Pagination Navigation"]>div:last-child{display:flex;flex:1;gap:12px;align-items:center;justify-content:space-between}
+}
+nav[aria-label="Pagination Navigation"] a,
+nav[aria-label="Pagination Navigation"]>div:first-child>span,
+nav[aria-label="Pagination Navigation"] span[aria-current="page"]>span,
+nav[aria-label="Pagination Navigation"] span[aria-disabled="true"]>span{
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:38px;
+  padding:8px 14px;font-size:14px;font-weight:500;line-height:1;
+  color:#065f46;background:#fff;border:1px solid #d1d5db;border-radius:10px;text-decoration:none;
+}
+nav[aria-label="Pagination Navigation"] a:hover{background:#ecfdf5}
+nav[aria-label="Pagination Navigation"] span[aria-current="page"]>span{background:#059669;color:#fff;border-color:#059669}
+nav[aria-label="Pagination Navigation"] span[aria-disabled="true"]>span{opacity:.45;cursor:not-allowed}
+nav[aria-label="Pagination Navigation"] p{margin:0;font-size:13px;color:#6b7280}
